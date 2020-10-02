@@ -175,28 +175,32 @@ void ColorMap::reinit()
         float step = (2.0f/3.0f)/(nColors-1);
         for (unsigned int i=0; i<nColors; i++)
         {
-            entries.push_back(Color(hsv2rgb(Color3(i*step, 1.0f, 1.0f)), 1.0f));
+            const auto& rgb = hsv2rgb(Color3{ float(i * step), 1.0f, 1.0f });
+            entries.push_back({ rgb[0], rgb[1],rgb[2], 1.0f });
         }
     } else if (scheme == "Blue to Red") {
         // List the colors
         float step = (2.0f/3.0f)/(nColors-1);
         for (unsigned int i=0; i<nColors; i++)
         {
-            entries.push_back(Color(hsv2rgb(Color3(2.0f/3.0f - i*step, 1.0f, 1.0f)), 1.0f));
+            const auto& rgb = hsv2rgb(Color3{ 2.0f / 3.0f - i * step, 1.0f, 1.0f });
+            entries.push_back({ rgb[0], rgb[1],rgb[2], 1.0f });
         }
     } else if (scheme == "Yellow to Cyan") {
         // List the colors
         float step = (0.5f - 1.0f/6.0f)/(nColors-1);
         for (unsigned int i=0; i<nColors; i++)
         {
-            entries.push_back(Color(hsv2rgb(Color3(1.0f/6.0f + i*step, 1.0f, 1.0f)), 1.0f));
+            const auto& rgb = hsv2rgb(Color3{ 1.0f / 6.0f + i * step, 1.0f, 1.0f });
+            entries.push_back({ rgb[0], rgb[1],rgb[2], 1.0f });
         }
     } else if (scheme == "Cyan to Yellow") {
         // List the colors
         float step = (0.5f - 1.0f/6.0f)/(nColors-1);
         for (unsigned int i=0; i<nColors; i++)
         {
-            entries.push_back(Color(hsv2rgb(Color3(0.5f-i*step, 1.0f, 1.0f)), 1.0f));
+            const auto& rgb = hsv2rgb(Color3{ 0.5f - i * step, 1.0f, 1.0f });
+            entries.push_back({ rgb[0], rgb[1],rgb[2], 1.0f });
         }
     } else if (scheme == "Red to Yellow") {
         float step = 1.0f/(nColors);
@@ -316,7 +320,8 @@ void ColorMap::reinit()
         float step = 1.0f/(nColors-1);
         for (unsigned int i=0; i<nColors; i++)
         {
-            entries.push_back(Color(hsv2rgb(Color3(i*step,1,1)), 1.0f));
+            const auto& rgb = hsv2rgb(Color3{ float(i * step),1.0f,1.0f });
+            entries.push_back({ rgb[0], rgb[1],rgb[2], 1.0f });
         }
     }
 }
@@ -329,7 +334,7 @@ void ColorMap::reinit()
 // Ref: Alvy Ray Smith, Color Gamut Transform Pairs, SIGGRAPH '78
 ColorMap::Color3 ColorMap::hsv2rgb(const Color3 &hsv)
 {
-    Color3 rgb(0.0f, 0.0f, 0.0f);
+    Color3 rgb{ 0.0f, 0.0f, 0.0f };
 
     float i, f;
     f = modff(hsv[0] * 6.0f, &i);
@@ -339,12 +344,12 @@ ColorMap::Color3 ColorMap::hsv2rgb(const Color3 &hsv)
            z = hsv[2] * (1.0f - hsv[1] * (1.0f - f));
 
     switch ((int)i % 6) {
-        case 0: rgb = Color3(hsv[2],      z,      x); break;
-        case 1: rgb = Color3(     y, hsv[2],      x); break;
-        case 2: rgb = Color3(     x, hsv[2],      z); break;
-        case 3: rgb = Color3(     x,      y, hsv[2]); break;
-        case 4: rgb = Color3(     z,      x, hsv[2]); break;
-        case 5: rgb = Color3(hsv[2],      x,      y); break;
+        case 0: rgb = Color3{ hsv[2],      z,      x }; break;
+        case 1: rgb = Color3{ y     , hsv[2],      x }; break;
+        case 2: rgb = Color3{ x     , hsv[2],      z }; break;
+        case 3: rgb = Color3{ x     ,      y, hsv[2] }; break;
+        case 4: rgb = Color3{ z     ,      x, hsv[2] }; break;
+        case 5: rgb = Color3{ hsv[2],      x,      y }; break;
     }
 
     return rgb;

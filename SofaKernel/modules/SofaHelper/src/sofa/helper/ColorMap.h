@@ -24,12 +24,11 @@
 
 #include <sofa/helper/config.h>
 
+#include <array>
 #include <sofa/helper/vector.h>
 #include <sofa/helper/rmath.h>
-#include <sofa/defaulttype/Vec.h>
+#include <sofa/helper/types/RGBAColor.h>
 #include <string>
-//#include <sofa/helper/OptionsGroup.h>
-
 
 namespace sofa
 {
@@ -40,9 +39,8 @@ namespace helper
 class SOFA_HELPER_API ColorMap 
 {
 public:
-
-    typedef defaulttype::Vec3f Color3;  // Color tripplet
-    typedef defaulttype::Vec4f Color;   // ... with alpha value
+    typedef std::array<float, 3> Color3;
+    typedef types::RGBAColor Color;
     typedef sofa::helper::vector<Color> VecColor;
     
     ColorMap(unsigned int paletteSize = 256, const std::string& colorScheme = "HSV");
@@ -94,7 +92,7 @@ public:
     void setColorScheme(const std::string& colorScheme) { m_colorScheme = colorScheme; }
 
     unsigned int getNbColors() { return (unsigned int) entries.size(); }
-    Color getColor(unsigned int i) {
+    auto getColor(unsigned int i) {
         if (i < entries.size()) return entries[i];
         return Color(0.0, 0.0, 0.0, 0.0);
     }
