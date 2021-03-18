@@ -253,7 +253,8 @@ bool FileRepository::findFileIn(std::string& filename, const std::string& path)
         locale = std::locale("");
     }
     boost::filesystem::path::imbue(locale);
-    boost::filesystem::path p(newfname);
+    std::wstring wnewfname = sofa::helper::Utils::widenString(newfname);
+    boost::filesystem::path p(wnewfname);
     if (boost::filesystem::exists(p))
     {
         // File found
