@@ -111,7 +111,8 @@ public:
 
     T* beginEdit()
     {
-        if(!ptr.unique())
+        // unique is deprecated because it is not thread-safe (use_count() is not neither though) https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count
+        if(ptr.use_count() != 1)
         {
             ptr.reset(new T(*ptr)); // a priori the Data will be modified -> copy
         }
@@ -129,7 +130,7 @@ public:
 
     void setValue(const T& value)
     {
-        if(!ptr.unique())
+        if(ptr.use_count() != 1)
         {
             ptr.reset(new T(value)); // the Data is modified -> copy
         }

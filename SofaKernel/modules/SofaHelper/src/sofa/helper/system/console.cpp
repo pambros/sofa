@@ -38,12 +38,11 @@ namespace console {
 
 void setStatus(Status status) noexcept
 {
-    internal::get_status() = status;
 }
 
 Status getStatus() noexcept
 {
-    return internal::get_status();
+	return Status(Status::Off);
 }
 
 

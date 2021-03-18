@@ -108,28 +108,6 @@ void BackTrace::dump()
         }
     }
 #elif !defined(__GNUC__) && !defined(__APPLE__) && defined(WIN32)
-    unsigned int   i;
-    void         * stack[100];
-    unsigned short frames;
-    SYMBOL_INFO  * symbol;
-    HANDLE         process;
-
-    process = GetCurrentProcess();
-
-    SymInitialize(process, nullptr, TRUE);
-
-    frames = CaptureStackBackTrace(0, 100, stack, nullptr);
-    symbol = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
-    symbol->MaxNameLen = 255;
-    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-
-    for (i = 0; i < frames; i++)
-    {
-        SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
-        std::cerr << (frames - i - 1) << ": " << symbol->Name << " - 0x" << std::hex << symbol->Address << std::dec ;
-    }
-
-    free(symbol);
 #endif
 }
 

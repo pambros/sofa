@@ -107,7 +107,7 @@ void SimpleTesselatedTetraTopologicalMapping::init()
                 );
 
                 pointMappedFromEdgeData.push_back(newPointIndex);
-                pointSourceData[newPointIndex] = -(i+1);
+                pointSourceData[newPointIndex] = (uint32_t)(-(int32_t)(i + 1));
                 newPointIndex++;
             }
 

@@ -135,33 +135,7 @@ std::string Utils::upcaseString(const std::string& s)
 
 #if defined WIN32
 std::string Utils::GetLastError() {
-    LPVOID lpErrMsgBuf;
-    LPVOID lpMessageBuf;
-    DWORD dwErrorCode = ::GetLastError();
-
-    // Get the string corresponding to the error code
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
-                  | FORMAT_MESSAGE_FROM_SYSTEM
-                  | FORMAT_MESSAGE_IGNORE_INSERTS,
-                  nullptr,
-                  dwErrorCode,
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                  (LPTSTR)&lpErrMsgBuf,
-                  0,
-                  nullptr);
-    // Allocate a bigger buffer
-    lpMessageBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
-                                      (lstrlen((LPCTSTR)lpErrMsgBuf)+40)*sizeof(TCHAR));
-    // Format the message like so: "error 'code': 'message'"
-    StringCchPrintf((LPTSTR)lpMessageBuf,
-                    LocalSize(lpMessageBuf) / sizeof(TCHAR),
-                    TEXT("error %d: %s"),
-                    dwErrorCode, lpErrMsgBuf);
-
-    std::wstring wsMessage((LPCTSTR)lpMessageBuf);
-    LocalFree(lpErrMsgBuf);
-    LocalFree(lpMessageBuf);
-    return narrowString(wsMessage);
+    return "Error TODO Utils.cpp GetLastError() for UWP";
 }
 #endif
 

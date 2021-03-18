@@ -61,14 +61,14 @@ struct FileInfoOwningFilename : public FileInfo
 {
     FileInfoOwningFilename(const char *f, int l) {
         char *tmp  = new char[strlen(f)+1] ;
-        strcpy(tmp, f) ;
+        strcpy_s(tmp, strlen(f)+1, f);
         filename = tmp ;
         line = l ;
     }
 
     FileInfoOwningFilename(const std::string& f, int l) {
         char *tmp  = new char[f.size()+1] ;
-        strcpy(tmp, f.c_str()) ;
+        strcpy_s(tmp, f.size()+1, f.c_str());
         filename = tmp ;
         line = l ;
     }

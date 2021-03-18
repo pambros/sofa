@@ -31,7 +31,6 @@
 #include <unistd.h>
 #endif
 
-#include <boost/filesystem.hpp>
 
 #include <cstring>
 #include <cstdlib>
@@ -252,9 +251,9 @@ bool FileRepository::findFileIn(std::string& filename, const std::string& path)
     {
         locale = std::locale("");
     }
-    boost::filesystem::path::imbue(locale);
-    boost::filesystem::path p(newfname);
-    if (boost::filesystem::exists(p))
+
+    DWORD dwAttrib = GetFileAttributes(sofa::helper::Utils::widenString(newfname).c_str());
+    if(dwAttrib != INVALID_FILE_ATTRIBUTES)
     {
         // File found
         filename = newfname;
@@ -374,7 +373,7 @@ std::string FileRepository::relativeToPath(std::string path, std::string refPath
 const std::string FileRepository::getTempPath() const
 {
     // TODO: replace std::filesystem when all compilers support it. (and not std::experimental::filesystem)
-    return boost::filesystem::temp_directory_path().string();
+    return "";
 }
 
 } // namespace system

@@ -6,7 +6,6 @@ project(SofaHelper)
 
 # Boost
 sofa_find_package(Boost REQUIRED
-    COMPONENTS filesystem
     OPTIONAL_COMPONENTS thread
     BOTH_SCOPES)
 if(SOFAHELPER_HAVE_BOOST_FILESYSTEM
@@ -210,10 +209,10 @@ if(Boost_THREAD_FOUND)
     list(APPEND HEADER_FILES ${SRC_ROOT}/system/thread/TimeoutWatchdog.h)
     list(APPEND SOURCE_FILES ${SRC_ROOT}/system/thread/TimeoutWatchdog.cpp)
 endif()
-if(Boost_FILESYSTEM_FOUND)
+# if(Boost_FILESYSTEM_FOUND)
     list(APPEND HEADER_FILES ${SRC_ROOT}/system/FileRepository.h)
     list(APPEND SOURCE_FILES ${SRC_ROOT}/system/FileRepository.cpp)
-endif()
+# endif()
 
 # Compatibility files
 set (COMPATSRC_ROOT "compat/")
@@ -301,7 +300,7 @@ endif()
 
 # Boost
 if(Boost_FOUND)
-    target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::filesystem)
+    target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
     if(Boost_THREAD_FOUND)
         target_link_libraries(${PROJECT_NAME} PUBLIC Boost::thread)
     endif()

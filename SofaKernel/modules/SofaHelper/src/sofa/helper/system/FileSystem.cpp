@@ -23,7 +23,6 @@
 #include <sofa/helper/logging/Messaging.h>
 #include <sofa/helper/Utils.h>
 
-#include <boost/filesystem.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -173,17 +172,9 @@ bool FileSystem::removeDirectory(const std::string& path)
 bool FileSystem::exists(const std::string& path)
 {
 #if defined(WIN32)
-    ::SetLastError(0);
-    if (PathFileExists(Utils::widenString(path).c_str()) != 0)
-        return true;
-    else
-    {
-        DWORD errorCode = ::GetLastError();
-        if (errorCode != ERROR_FILE_NOT_FOUND && errorCode != ERROR_PATH_NOT_FOUND) // not No such file error
-            msg_error("FileSystem::exists()") << path << ": " << Utils::GetLastError();
-        return false;
-    }
-
+    DWORD dwAttrib = GetFileAttributes(Utils::widenString(path).c_str());
+    return dwAttrib != INVALID_FILE_ATTRIBUTES;
+    //return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 #else
     struct stat st_buf;
     if (stat(path.c_str(), &st_buf) == 0)
@@ -316,9 +307,6 @@ std::string FileSystem::convertSlashesToBackSlashes(const std::string& path)
 }
 
 bool FileSystem::removeAll(const std::string& path){
-    try{
-        boost::filesystem::remove_all(path) ;
-    }catch(boost::filesystem::filesystem_error const & e){ return false ; }
     return true ;
 }
 

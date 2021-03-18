@@ -27,7 +27,6 @@ using sofa::helper::system::FileSystem;
 #include <sofa/helper/Utils.h>
 #include <sofa/helper/logging/Messaging.h>
 
-#include <boost/filesystem.hpp>
 #include <fstream>
 #include <array>
 
@@ -338,67 +337,6 @@ void PluginManager::init(const std::string& pluginPath)
 
 std::string PluginManager::findPlugin(const std::string& pluginName, const std::string& suffix, bool ignoreCase, bool recursive, int maxRecursiveDepth)
 {
-    std::vector<std::string> searchPaths = PluginRepository.getPaths();
-
-    std::string name(pluginName);
-    name  += suffix;
-    const std::string libName = DynamicLibrary::prefix + name + "." + DynamicLibrary::extension;
-
-    // First try: case sensitive
-    for (const auto & prefix : searchPaths) {
-        const std::array<std::string, 4> paths = {
-                prefix + "/" + libName,
-                prefix + "/" + pluginName + "/" + libName,
-                prefix + "/" + pluginName + "/bin/" + libName,
-                prefix + "/" + pluginName + "/lib/" + libName
-        };
-        for (const auto & path : paths) {
-            if (FileSystem::isFile(path)) {
-                return path;
-            }
-        }
-    }
-
-    // Second try: case insensitive and recursive
-    if (ignoreCase)
-    {
-        if(!recursive) maxRecursiveDepth = 0;
-        const std::string downcaseLibName = Utils::downcaseString(libName);
-
-        for (std::vector<std::string>::iterator i = searchPaths.begin(); i!=searchPaths.end(); i++)
-        {
-            const std::string& dir = *i;
-
-            boost::filesystem::recursive_directory_iterator iter(dir);
-            boost::filesystem::recursive_directory_iterator end;
-
-            while (iter != end)
-            {
-                if ( iter.level() > maxRecursiveDepth )
-                {
-                    iter.no_push(); // skip
-                }
-                else if ( !boost::filesystem::is_directory(iter->path()) )
-                {
-                    const std::string path = iter->path().string();
-                    const std::string filename = iter->path().filename().string();
-                    const std::string downcaseFilename = Utils::downcaseString(filename);
-
-                    if (downcaseFilename == downcaseLibName)
-                    {
-                        return FileSystem::cleanPath(path);
-                    }
-                }
-
-                boost::system::error_code ec;
-                iter.increment(ec);
-                if (ec)
-                {
-                    msg_error("PluginManager") << "Error while accessing " << iter->path().string() << ": " << ec.message();
-                }
-            }
-        }
-    }
     return std::string();
 }
 

@@ -155,9 +155,6 @@ using enableStd = typename std::enable_if<
     std::is_same<T, sofa::helper::console::Background::Bright>::value,
     std::ostream &>::type;
 
-#define __CONSOLE_INTERNAL__
-#include "console_internal.h"
-#undef __CONSOLE_INTERNAL__
 
 /// Enable or disable colors in stdout / stderr.
 ///
@@ -174,16 +171,7 @@ SOFA_HELPER_API size_t getColumnCount() ;
 template <typename T>
 inline enableStd<T> operator<<(std::ostream &os, const T & value)
 {
-    const Status status = internal::get_status();
-    switch (status) {
-        case sofa::helper::console::Status ::Auto:
-            return sofa::helper::console::internal::supportsColor()
-                   && sofa::helper::console::internal::isTerminal(os.rdbuf())
-                   ? sofa::helper::console::internal::setColor(os, value)
-                   : os;
-        case sofa::helper::console::Status::On : return sofa::helper::console::internal::setColor(os, value);
-        default: return os;
-    }
+    return os;
 }
 
 }; // namespace console
